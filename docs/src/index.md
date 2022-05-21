@@ -6,9 +6,9 @@ CurrentModule = SymbolDispatch
 
 Documentation for [SymbolDispatch](https://github.com/bgctw/SymbolDispatch.jl).
 
-```@index
+It exports macro `@symboldispatch`
+
+```@docs
+@symboldispatch
 ```
 
-```@autodocs
-Modules = [SymbolDispatch]
-```

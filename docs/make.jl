@@ -4,7 +4,7 @@ using Documenter
 DocMeta.setdocmeta!(SymbolDispatch, :DocTestSetup, :(using SymbolDispatch); recursive=true)
 
 makedocs(;
-    modules=[SymbolDispatch],
+    #modules=[SymbolDispatch],
     authors="Thomas Wutzler <twutz@bgc-jena.mpg.de> and contributors",
     repo="https://github.com/bgctw/SymbolDispatch.jl/blob/{commit}{path}#{line}",
     sitename="SymbolDispatch.jl",

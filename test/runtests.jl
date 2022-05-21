@@ -1,6 +1,8 @@
 using SymbolDispatch
 using Test
 
-@testset "SymbolDispatch.jl" begin
-    # Write your tests here.
-end
+# Macro testing does not work when wrapped iin @testset
+#@testset "symboldispatch" begin
+    #include("test/test_symboldispatch.jl")
+    include("test_symboldispatch.jl")
+#end

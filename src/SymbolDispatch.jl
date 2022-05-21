@@ -1,5 +1,8 @@
 module SymbolDispatch
 
-# Write your package code here.
+using MacroTools
+
+export @symboldispatch
+include("symboldispatch.jl")
 
 end
