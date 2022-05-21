@@ -47,18 +47,13 @@ function _symboldispatch(ex)
     args = esc(:args)
     kwargs = esc(:kwargs)
     Val = esc(:Val)
-    ex_dispatch = :(@inline $(fname)(s::$(esc(:Symbol)), $args...; $kwargs...) = 
-        $(fname)($Val(s), $args...; $kwargs...))
     T = esc(:T)
+    ex_dispatch = :(
+        @inline $(fname)(s::$(esc(:Symbol)), $args...; $kwargs...) = 
+        $(fname)($Val(s), $args...; $kwargs...))
     ex_default = :(
-        function $(fname)(::$Val{$T}, $args...; $kwargs...) where $T 
-            # local mstr = $(esc(:join))(
-            #     $(esc(string)).($(esc(methods))($(fname), ($Val,))[1:(end-1)]),"\n")
-            local mstr = extract_methods_varsymbols($fname)
-            $(esc(throw))( $(esc(ArgumentError))(
-                $fnamestr*"(:"* $(esc(string))($T) *
-                ", ...) not defined. Its defined for " * mstr))
-        end  
+        $(fname)(::$Val{$T}, $args...; $kwargs...) where $T = 
+        raise_argument_error($fname, $T)
     )
     quote
         $(esc(ex))
@@ -67,11 +62,20 @@ function _symboldispatch(ex)
     end
 end
 
+
+#using Infiltrator
+function raise_argument_error(f, sym)
+    local syms = extract_methods_varsymbols(f)
+    local syms_str = join(":" .* string.(syms),",")
+    throw(ArgumentError(
+        string(f)*"(:"*string(sym)*", ...) not defined. Its defined for "*syms_str))
+end
+
 """
     extract_methods_varsymbols(f)
 
 Filter all methods of f for first type being a Var{s::Symbol}, and return
-a string of the unique symbols.   
+a generator of unique symbols.   
 """
 function extract_methods_varsymbols(f)
     g = (mi.sig.parameters[2].parameters[1] for mi in methods(f) if 
@@ -80,5 +84,5 @@ function extract_methods_varsymbols(f)
     mi.sig.parameters[2] <: Val &&
     mi.sig.parameters[2].parameters[1] isa Symbol
     )
-    join(":" .* string.(unique(g)),",")
+    unique(g)
 end
