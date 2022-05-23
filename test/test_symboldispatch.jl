@@ -26,6 +26,20 @@ end
     check_bar_result()
 #end;
 
+check_bar2_result = () -> begin
+    @test length(methods(_bar)) == 3
+    #@code_warntype _bar(:m2)
+    @test @inferred(_bar(nothing, :m2)) == :m2
+    # informative Error instead of method exception
+    @test_throws ArgumentError _bar(nothing, :non_existing) 
+end
+
+
+delete_bar_methods()
+@symboldispatch_pos2 _bar(df, ::Val{:m2}) = :m2
+check_bar2_result()
+
+
 
 @testset "error on not passing a function" begin
     @test_throws AssertionError SymbolDispatch._symboldispatch(:(:not_a_function))
