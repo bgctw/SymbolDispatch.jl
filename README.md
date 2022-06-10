@@ -24,7 +24,7 @@ See [documentation](https://bgctw.github.io/SymbolDispatch.jl/dev)
 # Type-stable Alternatives 
 **Caution** The return of a [symbol-dispatched call is type-unstable](https://discourse.julialang.org/t/understand-why-type-stability-depends-on-number-of-methods/81434). 
 Use this pattern only in non-performance-critical parts of your application or where you can
-deal with type-instabiity.
+deal with type-instability.
 
 As an alternative, consider explicitly declaring Singleton-types.
 
@@ -34,7 +34,7 @@ struct PriestleyTaylor <: ETMethod end
 struct PenmanMonteith <: ETMethod end
 
 potential_ET(::PriestleyTaylor, Tair) = "return from PriestlyTaylor"
-function potential_ET(::PenmanMonteith, Tair) = "return from PenmanMonteith"
+potential_ET(::PenmanMonteith, Tair) = "return from PenmanMonteith"
 
 method = PriestleyTaylor()
 ET = potential_ET(method, 21.3)
